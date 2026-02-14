@@ -1,5 +1,21 @@
 import { Link, Route, Routes } from 'react-router-dom'
 
+const vendorList = [
+  'Edwin County Farms',
+  'Fiddlehead',
+  'Lambs Quarters',
+  'Nomad Mushroom',
+  'Paper Kite Farm',
+  'Portico Gardens',
+  'Return to Earth',
+  'Rorafresh',
+  'Scott Farms',
+  'Sunset Farms',
+  'The Elmbrook Farm',
+  'Van Stone Farms',
+  "Vicki's Veggies",
+]
+
 function Frame({ children }) {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -68,6 +84,7 @@ function CustomersPage() {
       <div className="mb-8 flex flex-wrap gap-2">
         <a href="https://cfc.localline.ca" target="_blank" rel="noreferrer" className="rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold hover:bg-slate-100">Shop Now</a>
         <a href="#newsletter" className="rounded-md border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-50">Join Newsletter</a>
+        <Link to="/our-vendors" className="rounded-md border border-slate-400 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-100">Browse Our Vendors</Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -91,6 +108,49 @@ function CustomersPage() {
       <div id="newsletter" className="mt-8 rounded-xl border border-slate-300 bg-white p-6">
         <h3 className="mb-2 text-xl font-semibold">Newsletter (Wireframe)</h3>
         <p className="text-slate-600">Join our newsletter for weekly updates on what’s fresh and available for sale in the County.</p>
+      </div>
+    </section>
+  )
+}
+
+function VendorsDirectoryPage() {
+  return (
+    <section className="mx-auto w-full max-w-6xl px-6 py-12">
+      <Link to="/customers" className="mb-6 inline-block text-sm text-slate-600 hover:underline">← Back to Customer Info</Link>
+      <h2 className="mb-3 text-3xl font-bold">Our Vendors</h2>
+      <p className="mb-8 max-w-3xl text-slate-600">
+        Explore the producers currently on the County Farm Collective platform. Click any vendor to view their profile page.
+      </p>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {vendorList.map((vendor) => (
+          <Link
+            key={vendor}
+            to={`/our-vendors/${slugify(vendor)}`}
+            className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-800 hover:bg-slate-100"
+          >
+            {vendor}
+          </Link>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function VendorProfilePlaceholder() {
+  return (
+    <section className="mx-auto w-full max-w-6xl px-6 py-12">
+      <Link to="/our-vendors" className="mb-6 inline-block text-sm text-slate-600 hover:underline">← Back to Our Vendors</Link>
+      <h2 className="mb-3 text-3xl font-bold">Vendor Profile (Wireframe)</h2>
+      <p className="mb-8 text-slate-600">Placeholder page for individual vendor details, story, products, and link to shop.</p>
+      <div className="rounded-xl border border-slate-300 bg-white p-6">
+        <InfoBlock title="Planned Vendor Profile Blocks" points={[
+          'Vendor overview / farm story',
+          'Product categories and seasonal notes',
+          'Quality and growing practices',
+          'Featured products in Local Line',
+          'Primary CTA: Shop Now',
+        ]} />
       </div>
     </section>
   )
@@ -139,12 +199,18 @@ function InfoBlock({ title, points }) {
   )
 }
 
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
 export default function App() {
   return (
     <Frame>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/customers" element={<CustomersPage />} />
+        <Route path="/our-vendors" element={<VendorsDirectoryPage />} />
+        <Route path="/our-vendors/:vendorSlug" element={<VendorProfilePlaceholder />} />
         <Route path="/vendors" element={<VendorsPage />} />
       </Routes>
     </Frame>
