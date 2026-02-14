@@ -84,14 +84,22 @@ function App() {
               <h3 className="mb-2 text-2xl font-semibold">Customer Path (Wireframe)</h3>
               <p className="text-slate-600">For people exploring how CFC works and ready to buy local food with confidence.</p>
             </div>
-            <a
-              href="https://cfc.localline.ca"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
-            >
-              Shop Now
-            </a>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href="https://cfc.localline.ca"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+              >
+                Shop Now
+              </a>
+              <a
+                href="#newsletter"
+                className="inline-flex items-center justify-center rounded-md border border-slate-400 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+              >
+                Join Newsletter
+              </a>
+            </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
@@ -117,6 +125,33 @@ function App() {
                 'Placeholder: Highest-quality-first sourcing principles',
                 'Placeholder: As-close-as-possible local sourcing preference',
                 'Placeholder: How tradeoffs are handled when supply is limited',
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="newsletter" className="mx-auto w-full max-w-6xl px-6 pb-10">
+        <div className="rounded-xl border border-slate-300 bg-white p-6">
+          <h3 className="mb-2 text-2xl font-semibold">Newsletter (Wireframe)</h3>
+          <p className="mb-4 text-slate-600">
+            Join our newsletter to get up-to-date updates on what’s fresh and available for sale in the County.
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <InfoBlock
+              title="What Subscribers Receive"
+              points={[
+                'Weekly fresh product highlights',
+                'New arrivals and limited quantities',
+                'Order window reminders + key deadlines',
+              ]}
+            />
+            <InfoBlock
+              title="Signup CTA"
+              points={[
+                'Placeholder: newsletter signup form/embed',
+                'Placeholder: privacy/consent language',
+                'Placeholder: confirmation and welcome flow',
               ]}
             />
           </div>
