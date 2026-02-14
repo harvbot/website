@@ -95,7 +95,7 @@ function App() {
               </a>
               <a
                 href="#newsletter"
-                className="inline-flex items-center justify-center rounded-md border border-slate-400 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                className="inline-flex items-center justify-center rounded-md border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
               >
                 Join Newsletter
               </a>
