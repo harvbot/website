@@ -14,6 +14,19 @@ function Card({ title, blurb, cta, href = '#', external = false }) {
   )
 }
 
+function InfoBlock({ title, points }) {
+  return (
+    <div className="rounded-lg border border-slate-300 bg-slate-50 p-4">
+      <h4 className="mb-2 text-base font-semibold text-slate-900">{title}</h4>
+      <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
+        {points.map((p) => (
+          <li key={p}>{p}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 function App() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -77,12 +90,45 @@ function App() {
 
       <section id="vendors" className="mx-auto w-full max-w-6xl px-6 pb-16">
         <div className="rounded-xl border border-slate-300 bg-white p-6">
-          <h3 className="mb-2 text-2xl font-semibold">Vendor Path (Wireframe)</h3>
-          <ul className="list-disc space-y-2 pl-5 text-slate-700">
-            <li>Who we work with and product expectations</li>
-            <li>Weekly flow: intake, fulfillment, payout cadence</li>
-            <li>Apply/Contact CTA for onboarding conversation</li>
-          </ul>
+          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h3 className="mb-2 text-2xl font-semibold">Vendor Path (Wireframe)</h3>
+              <p className="text-slate-600">Interested in selling through County Farm Collective? Start with a quick intro email.</p>
+            </div>
+            <a
+              href="mailto:info@countyfarmcollective.com?subject=Vendor%20Inquiry%20-%20County%20Farm%20Collective"
+              className="inline-flex items-center justify-center rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+            >
+              Email to Get Started
+            </a>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <InfoBlock
+              title="Weekly Schedule"
+              points={[
+                'Placeholder: Order intake cutoff timing',
+                'Placeholder: Delivery/pickup fulfillment day',
+                'Placeholder: Vendor update and handoff windows',
+              ]}
+            />
+            <InfoBlock
+              title="Markup Strategy"
+              points={[
+                'Placeholder: CFC markup framework overview',
+                'Placeholder: How pricing is communicated',
+                'Placeholder: Margin and payout transparency notes',
+              ]}
+            />
+            <InfoBlock
+              title="Program Details"
+              points={[
+                'Placeholder: Product standards and expectations',
+                'Placeholder: Onboarding checklist',
+                'Placeholder: Payment/payout cadence and contacts',
+              ]}
+            />
+          </div>
         </div>
       </section>
     </main>
