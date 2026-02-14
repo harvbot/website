@@ -79,12 +79,47 @@ function App() {
 
       <section id="customers" className="mx-auto w-full max-w-6xl px-6 pb-10">
         <div className="rounded-xl border border-slate-300 bg-white p-6">
-          <h3 className="mb-2 text-2xl font-semibold">Customer Path (Wireframe)</h3>
-          <ul className="list-disc space-y-2 pl-5 text-slate-700">
-            <li>How it works (weekly ordering + fulfillment options)</li>
-            <li>Pickup/delivery zones and cadence</li>
-            <li>FAQ + link to live storefront</li>
-          </ul>
+          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h3 className="mb-2 text-2xl font-semibold">Customer Path (Wireframe)</h3>
+              <p className="text-slate-600">For people exploring how CFC works and ready to buy local food with confidence.</p>
+            </div>
+            <a
+              href="https://cfc.localline.ca"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+            >
+              Shop Now
+            </a>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <InfoBlock
+              title="Weekly Schedule"
+              points={[
+                'Placeholder: Weekly order window and cutoff timing',
+                'Placeholder: Fulfillment day(s) for pickup and delivery',
+                'Placeholder: Where/when customers receive updates',
+              ]}
+            />
+            <InfoBlock
+              title="How We Represent Farmers"
+              points={[
+                'Placeholder: How producer stories and product origin are communicated',
+                'Placeholder: How we curate and present seasonal availability',
+                'Placeholder: How customer trust is built through transparency',
+              ]}
+            />
+            <InfoBlock
+              title="Quality + Proximity Standards"
+              points={[
+                'Placeholder: Highest-quality-first sourcing principles',
+                'Placeholder: As-close-as-possible local sourcing preference',
+                'Placeholder: How tradeoffs are handled when supply is limited',
+              ]}
+            />
+          </div>
         </div>
       </section>
 
