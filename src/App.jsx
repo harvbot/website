@@ -81,6 +81,24 @@ function CustomersPage() {
       <h2 className="mb-3 text-3xl font-bold">Customer Information</h2>
       <p className="mb-8 text-slate-600">For households and restaurants looking to buy high-quality food from as close as possible in the County.</p>
 
+      <div className="mb-8 grid gap-4 md:grid-cols-2">
+        <div className="rounded-lg border border-slate-300 bg-white p-5">
+          <h3 className="mb-2 text-lg font-semibold">How It Works</h3>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
+            <li>Browse what’s fresh each week from local vendors.</li>
+            <li>Place your order through the CFC storefront.</li>
+            <li>Receive your food through scheduled pickup/delivery fulfillment.</li>
+          </ul>
+        </div>
+        <div className="rounded-lg border border-slate-300 bg-white p-5">
+          <h3 className="mb-2 text-lg font-semibold">Why We’re Doing This</h3>
+          <p className="text-sm leading-6 text-slate-700">
+            To reconnect County citizens with exceptional local food, restore excitement around seasonality,
+            and make buying from your neighbors as convenient as shopping at a grocery store.
+          </p>
+        </div>
+      </div>
+
       <div className="mb-8 flex flex-wrap gap-2">
         <a href="https://cfc.localline.ca" target="_blank" rel="noreferrer" className="rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold hover:bg-slate-100">Shop Now</a>
         <a href="#newsletter" className="rounded-md border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-50">Join Newsletter</a>
@@ -162,6 +180,24 @@ function VendorsPage() {
       <Link to="/" className="mb-6 inline-block text-sm text-slate-600 hover:underline">← Back to Home</Link>
       <h2 className="mb-3 text-3xl font-bold">Vendor Information</h2>
       <p className="mb-8 text-slate-600">Interested in selling through County Farm Collective? Start with an intro email.</p>
+
+      <div className="mb-8 grid gap-4 md:grid-cols-2">
+        <div className="rounded-lg border border-slate-300 bg-white p-5">
+          <h3 className="mb-2 text-lg font-semibold">How It Works</h3>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
+            <li>Share your products and availability with CFC.</li>
+            <li>We support merchandising, customer communication, and order flow.</li>
+            <li>Your products move through coordinated fulfillment across the County.</li>
+          </ul>
+        </div>
+        <div className="rounded-lg border border-slate-300 bg-white p-5">
+          <h3 className="mb-2 text-lg font-semibold">Why We’re Doing This</h3>
+          <p className="text-sm leading-6 text-slate-700">
+            To empower excellent producers to stay focused on the field while CFC handles marketing,
+            accounts receivable, and logistics so local food can reach more County households.
+          </p>
+        </div>
+      </div>
 
       <a href="mailto:info@countyfarmcollective.com?subject=Vendor%20Inquiry%20-%20County%20Farm%20Collective" className="mb-8 inline-flex rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold hover:bg-slate-100">Email to Get Started</a>
 
