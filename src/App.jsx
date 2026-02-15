@@ -18,7 +18,7 @@ const vendorList = [
 
 function Frame({ children }) {
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <main className="min-h-screen bg-blue-100 text-slate-900">
       <header className="border-b border-slate-300 bg-white">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
           <div>
