@@ -233,7 +233,7 @@ function TransparencyPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch('/transparency/latest/summary.json')
+    fetch(`${import.meta.env.BASE_URL}transparency/latest/summary.json`)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
