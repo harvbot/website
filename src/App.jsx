@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 
 const vendorList = [
@@ -25,14 +26,19 @@ function Frame({ children }) {
             <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Wireframe</p>
             <Link to="/" className="text-lg font-semibold hover:underline">County Farm Collective</Link>
           </div>
-          <a
-            href="https://cfc.localline.ca"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
-          >
-            Shop Now
-          </a>
+          <div className="flex items-center gap-3">
+            <Link to="/transparency" className="rounded-md border border-slate-400 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-100">
+              Transparency
+            </Link>
+            <a
+              href="https://cfc.localline.ca"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+            >
+              Shop Now
+            </a>
+          </div>
         </div>
       </header>
       {children}
@@ -222,6 +228,75 @@ function VendorsPage() {
   )
 }
 
+function TransparencyPage() {
+  const [data, setData] = useState(null)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/transparency/latest/summary.json')
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then(setData)
+      .catch((e) => setError(e.message))
+  }, [])
+
+  const metrics = data?.metrics || {}
+
+  return (
+    <section className="mx-auto w-full max-w-6xl px-6 py-12">
+      <Link to="/" className="mb-6 inline-block text-sm text-slate-600 hover:underline">← Back to Home</Link>
+      <h2 className="mb-3 text-3xl font-bold">Transparency Dashboard</h2>
+      <p className="mb-8 text-slate-600">Public monthly operating snapshot from CFC transparency pack JSON.</p>
+
+      {error && <p className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700">Could not load summary.json ({error})</p>}
+
+      {!error && !data && <p className="text-slate-600">Loading latest transparency pack...</p>}
+
+      {data && (
+        <>
+          <div className="mb-6 grid gap-3 md:grid-cols-3">
+            <MetricCard label="Month" value={data.month} />
+            <MetricCard label="Status" value={data.status} />
+            <MetricCard label="Currency" value={data.currency} />
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            <MetricCard label="GMV" value={fmt(metrics.gmv_cents)} />
+            <MetricCard label="Commission Revenue" value={fmt(metrics.commission_revenue_cents)} />
+            <MetricCard label="Vendor Payout Accrued" value={fmt(metrics.vendor_payout_accrued_cents)} />
+            <MetricCard label="Vendor Payout Paid" value={fmt(metrics.vendor_payout_paid_cents)} />
+            <MetricCard label="Processing Fees" value={fmt(metrics.processing_fees_cents)} />
+            <MetricCard label="Operating Expenses" value={fmt(metrics.operating_expenses_cents)} />
+            <MetricCard label="Net Operating Result" value={fmt(metrics.net_operating_result_cents)} />
+            <MetricCard label="Ending Vendor Payable" value={fmt(metrics.ending_vendor_payable_cents)} />
+          </div>
+
+          <div className="mt-8 rounded-lg border border-slate-300 bg-white p-5">
+            <h3 className="mb-2 text-lg font-semibold">Raw JSON</h3>
+            <pre className="overflow-auto rounded bg-slate-900 p-4 text-xs text-slate-100">{JSON.stringify(data, null, 2)}</pre>
+          </div>
+        </>
+      )}
+    </section>
+  )
+}
+
+function MetricCard({ label, value }) {
+  return (
+    <div className="rounded-lg border border-slate-300 bg-white p-4">
+      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-1 text-lg font-semibold text-slate-900">{value ?? '—'}</p>
+    </div>
+  )
+}
+
+function fmt(cents) {
+  if (typeof cents !== 'number') return '—'
+  return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(cents / 100)
+}
+
 function InfoBlock({ title, points }) {
   return (
     <div className="rounded-lg border border-slate-300 bg-white p-4">
@@ -248,6 +323,7 @@ export default function App() {
         <Route path="/our-vendors" element={<VendorsDirectoryPage />} />
         <Route path="/our-vendors/:vendorSlug" element={<VendorProfilePlaceholder />} />
         <Route path="/vendors" element={<VendorsPage />} />
+        <Route path="/transparency" element={<TransparencyPage />} />
       </Routes>
     </Frame>
   )

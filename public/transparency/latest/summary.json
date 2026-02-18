@@ -1,0 +1,20 @@
+{
+  "schema_version": "cfc.transparency.v1",
+  "month": "2026-02",
+  "status": "provisional",
+  "currency": "CAD",
+  "metrics": {
+    "gmv_cents": 54626,
+    "vendor_payout_accrued_cents": 45521,
+    "vendor_payout_paid_cents": 0,
+    "commission_revenue_cents": 9105,
+    "processing_fees_cents": 0,
+    "operating_expenses_cents": 0,
+    "net_operating_result_cents": 9105,
+    "ending_vendor_payable_cents": 45521
+  },
+  "notes": [
+    "vendor_payout_paid_cents is 0 until payout cash entries are imported.",
+    "operating_expenses_cents excluded by default unless include_opex=true."
+  ]
+}
