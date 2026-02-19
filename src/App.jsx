@@ -51,9 +51,9 @@ function Landing() {
     <>
       <section className="mx-auto w-full max-w-6xl px-6 py-12">
         <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-600">Landing Page IA Draft</p>
-        <h2 className="mb-4 text-4xl font-bold tracking-tight">Local food, organized weekly.</h2>
+        <h2 className="mb-4 text-4xl font-bold tracking-tight">From Prince Edward County farms to County tables.</h2>
         <p className="max-w-3xl text-base leading-7 text-slate-600">
-          Choose the path that fits what you need right now.
+          Shop weekly. We consolidate local orders, pack fresh, and deliver every week.
         </p>
       </section>
 
