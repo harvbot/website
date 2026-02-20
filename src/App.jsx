@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 
 const vendorList = [
   'Edwin County Farms',
@@ -255,40 +255,145 @@ function VendorsPage() {
 }
 
 function TransparencyPage() {
-  const [data, setData] = useState(null)
+  const { month: monthParam } = useParams()
+  const navigate = useNavigate()
+  const [index, setIndex] = useState([])
+  const [summaries, setSummaries] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}transparency/latest/summary.json`)
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        return r.json()
-      })
-      .then(setData)
-      .catch((e) => setError(e.message))
+    let alive = true
+
+    async function load() {
+      try {
+        setError('')
+        const base = import.meta.env.BASE_URL
+
+        let items = []
+        try {
+          const idxRes = await fetch(`${base}transparency/index.json`)
+          if (idxRes.ok) {
+            const idx = await idxRes.json()
+            items = Array.isArray(idx.months) ? idx.months : []
+          }
+        } catch {
+          // fallback below
+        }
+
+        if (items.length === 0) {
+          const latestRes = await fetch(`${base}transparency/latest/summary.json`)
+          if (!latestRes.ok) throw new Error(`HTTP ${latestRes.status}`)
+          const latest = await latestRes.json()
+          items = [{ month: latest.month, path: 'latest' }]
+        }
+
+        const loaded = await Promise.all(
+          items.map(async (item) => {
+            const month = item.month
+            const path = item.path || item.month
+            const res = await fetch(`${base}transparency/${path}/summary.json`)
+            if (!res.ok) throw new Error(`HTTP ${res.status} while loading ${month}`)
+            const json = await res.json()
+            return { ...json, __path: path }
+          }),
+        )
+
+        loaded.sort((a, b) => a.month.localeCompare(b.month))
+
+        if (!alive) return
+        setIndex(items)
+        setSummaries(loaded)
+      } catch (e) {
+        if (!alive) return
+        setError(e.message)
+      }
+    }
+
+    load()
+    return () => {
+      alive = false
+    }
   }, [])
 
-  const metrics = data?.metrics || {}
+  const currentIndex = useMemo(() => {
+    if (!summaries.length) return -1
+    if (!monthParam) return summaries.length - 1
+    return summaries.findIndex((s) => s.month === monthParam)
+  }, [summaries, monthParam])
+
+  const selected = currentIndex >= 0 ? summaries[currentIndex] : summaries[summaries.length - 1]
+
+  const series = useMemo(() => {
+    return summaries.map((s) => {
+      const m = s.metrics || {}
+      return {
+        month: s.month,
+        operatingCash: pickNumber(m.operating_cash_cents, m.net_operating_result_cents),
+        vendorPayouts: pickNumber(m.vendor_payout_paid_cents, m.vendor_payout_accrued_cents),
+        totalProductsSold: pickNumber(m.total_products_sold_cents, m.gmv_cents),
+      }
+    })
+  }, [summaries])
+
+  const goToMonth = (idx) => {
+    const target = summaries[idx]
+    if (!target) return
+    navigate(`/transparency/${target.month}`)
+  }
+
+  const metrics = selected?.metrics || {}
 
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-12">
       <Link to="/" className="mb-6 inline-block text-sm text-[#6d5f50] hover:underline">← Back to Home</Link>
       <h2 className="mb-3 text-3xl font-bold">Transparency Dashboard</h2>
-      <p className="mb-8 text-[#6d5f50]">Public monthly operating snapshot from CFC transparency pack JSON.</p>
+      <p className="mb-8 text-[#6d5f50]">Month-over-month financial trend with monthly drill-down.</p>
 
-      {error && <p className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700">Could not load summary.json ({error})</p>}
+      {error && <p className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700">Could not load transparency data ({error})</p>}
 
-      {!error && !data && <p className="text-[#6d5f50]">Loading latest transparency pack...</p>}
+      {!error && !selected && <p className="text-[#6d5f50]">Loading transparency data...</p>}
 
-      {data && (
+      {selected && (
         <>
+          <div className="mb-6 rounded-lg border border-[#d9cebf] bg-[#fffdf8] p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <h3 className="text-lg font-semibold">Monthly Trend</h3>
+              <div className="flex items-center gap-2">
+                <button
+                  className="rounded-md border border-[#d8ccbc] px-3 py-1.5 text-sm disabled:opacity-40"
+                  onClick={() => goToMonth(currentIndex - 1)}
+                  disabled={currentIndex <= 0}
+                >
+                  ← Previous Month
+                </button>
+                <button
+                  className="rounded-md border border-[#d8ccbc] px-3 py-1.5 text-sm disabled:opacity-40"
+                  onClick={() => goToMonth(currentIndex + 1)}
+                  disabled={currentIndex >= summaries.length - 1}
+                >
+                  Next Month →
+                </button>
+              </div>
+            </div>
+
+            <p className="mb-3 text-sm text-[#6d5f50]">
+              Viewing: <strong>{selected.month}</strong> ({selected.status || 'status n/a'})
+            </p>
+
+            <LineChart data={series} selectedMonth={selected.month} />
+            <p className="mt-3 text-xs text-[#7a6b5c]">Series: Operating Cash, Vendor Payouts, Total Products Sold (CAD).</p>
+          </div>
+
           <div className="mb-6 grid gap-3 md:grid-cols-3">
-            <MetricCard label="Month" value={data.month} />
-            <MetricCard label="Status" value={data.status} />
-            <MetricCard label="Currency" value={data.currency} />
+            <MetricCard label="Month" value={selected.month} />
+            <MetricCard label="Status" value={selected.status} />
+            <MetricCard label="Currency" value={selected.currency} />
           </div>
 
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            <MetricCard label="Operating Cash" value={fmt(pickNumber(metrics.operating_cash_cents, metrics.net_operating_result_cents))} />
+            <MetricCard label="Vendor Payouts" value={fmt(pickNumber(metrics.vendor_payout_paid_cents, metrics.vendor_payout_accrued_cents))} />
+            <MetricCard label="Total Products Sold" value={fmt(pickNumber(metrics.total_products_sold_cents, metrics.gmv_cents))} />
             <MetricCard label="GMV" value={fmt(metrics.gmv_cents)} />
             <MetricCard label="Commission Revenue" value={fmt(metrics.commission_revenue_cents)} />
             <MetricCard label="Vendor Payout Accrued" value={fmt(metrics.vendor_payout_accrued_cents)} />
@@ -301,7 +406,7 @@ function TransparencyPage() {
 
           <div className="mt-8 rounded-lg border border-[#d9cebf] bg-[#fffdf8] p-5">
             <h3 className="mb-2 text-lg font-semibold">Raw JSON</h3>
-            <pre className="overflow-auto rounded bg-slate-900 p-4 text-xs text-slate-100">{JSON.stringify(data, null, 2)}</pre>
+            <pre className="overflow-auto rounded bg-slate-900 p-4 text-xs text-slate-100">{JSON.stringify(selected, null, 2)}</pre>
           </div>
         </>
       )}
@@ -321,6 +426,73 @@ function MetricCard({ label, value }) {
 function fmt(cents) {
   if (typeof cents !== 'number') return '—'
   return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(cents / 100)
+}
+
+function pickNumber(...values) {
+  return values.find((v) => typeof v === 'number')
+}
+
+function LineChart({ data, selectedMonth }) {
+  if (!data?.length) return <p className="text-sm text-[#6d5f50]">No monthly data available yet.</p>
+
+  const width = 900
+  const height = 260
+  const pad = 30
+
+  const values = data.flatMap((d) => [d.operatingCash, d.vendorPayouts, d.totalProductsSold]).filter((v) => typeof v === 'number')
+  const maxVal = Math.max(...values, 1)
+
+  const x = (i) => pad + (i * (width - pad * 2)) / Math.max(data.length - 1, 1)
+  const y = (v) => height - pad - (v / maxVal) * (height - pad * 2)
+
+  const pathFor = (key) => {
+    const pts = data
+      .map((d, i) => ({ x: x(i), y: y(d[key]), ok: typeof d[key] === 'number' }))
+      .filter((p) => p.ok)
+    if (!pts.length) return ''
+    return pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+  }
+
+  const lines = [
+    { key: 'operatingCash', label: 'Operating Cash', color: '#2F5D50' },
+    { key: 'vendorPayouts', label: 'Vendor Payouts', color: '#B86F4B' },
+    { key: 'totalProductsSold', label: 'Total Products Sold', color: '#3B82F6' },
+  ]
+
+  return (
+    <div>
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full rounded border border-[#e3d8c9] bg-white">
+        <line x1={pad} y1={height - pad} x2={width - pad} y2={height - pad} stroke="#d8ccbc" />
+        <line x1={pad} y1={pad} x2={pad} y2={height - pad} stroke="#d8ccbc" />
+
+        {lines.map((line) => (
+          <path key={line.key} d={pathFor(line.key)} fill="none" stroke={line.color} strokeWidth="2.5" />
+        ))}
+
+        {data.map((d, i) => {
+          const cx = x(i)
+          const isSelected = d.month === selectedMonth
+          return (
+            <g key={d.month}>
+              <line x1={cx} y1={height - pad} x2={cx} y2={height - pad + 5} stroke="#b9ac9b" />
+              <text x={cx} y={height - 8} textAnchor="middle" fontSize="10" fill={isSelected ? '#2F5D50' : '#7b6f61'}>
+                {d.month}
+              </text>
+            </g>
+          )
+        })}
+      </svg>
+
+      <div className="mt-3 flex flex-wrap gap-4 text-sm">
+        {lines.map((line) => (
+          <div key={line.key} className="flex items-center gap-2">
+            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ backgroundColor: line.color }} />
+            <span>{line.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 function InfoBlock({ title, points }) {
@@ -350,6 +522,7 @@ export default function App() {
         <Route path="/our-vendors/:vendorSlug" element={<VendorProfilePlaceholder />} />
         <Route path="/vendors" element={<VendorsPage />} />
         <Route path="/transparency" element={<TransparencyPage />} />
+        <Route path="/transparency/:month" element={<TransparencyPage />} />
       </Routes>
     </Frame>
   )

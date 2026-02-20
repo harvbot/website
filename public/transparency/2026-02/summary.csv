@@ -1,0 +1,2 @@
+month,status,currency,gmv_cents,vendor_payout_accrued_cents,vendor_payout_paid_cents,commission_revenue_cents,processing_fees_cents,operating_expenses_cents,net_operating_result_cents,ending_vendor_payable_cents
+2026-02,provisional,CAD,54626,45521,0,9105,0,0,9105,45521
