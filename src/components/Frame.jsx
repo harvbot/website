@@ -10,12 +10,6 @@ export default function Frame({ children }) {
             <Link to="/" className="text-lg font-semibold hover:text-[#2F5D50]">County Farm Collective</Link>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/code-of-conduct" className="rounded-md border border-[#d8ccbc] px-4 py-2 text-sm font-semibold text-[#6d5f50] hover:bg-[#f3ece1]">
-              Code of Conduct
-            </Link>
-            <Link to="/transparency" className="rounded-md border border-[#8FA27A] px-4 py-2 text-sm font-semibold text-[#2F5D50] hover:bg-[#edf3e8]">
-              Transparency
-            </Link>
             <a
               href="https://cfc.localline.ca"
               target="_blank"
