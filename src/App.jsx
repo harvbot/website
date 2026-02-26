@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import Frame from './components/Frame'
+import CodeOfConductPage from './pages/CodeOfConductPage'
 import CustomersPage from './pages/CustomersPage'
 import LandingPage from './pages/LandingPage'
 import TransparencyPage from './pages/TransparencyPage'
@@ -13,6 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/customers" element={<CustomersPage />} />
+        <Route path="/code-of-conduct" element={<CodeOfConductPage />} />
         <Route path="/our-vendors" element={<VendorsDirectoryPage />} />
         <Route path="/our-vendors/:vendorSlug" element={<VendorProfilePlaceholderPage />} />
         <Route path="/vendors" element={<VendorsPage />} />
