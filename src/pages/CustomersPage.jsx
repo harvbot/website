@@ -5,54 +5,52 @@ export default function CustomersPage() {
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-12">
       <Link to="/" className="mb-6 inline-block text-sm text-[#6d5f50] hover:underline">← Back to Home</Link>
-      <h2 className="mb-3 text-3xl font-bold">Customer Information</h2>
-      <p className="mb-8 text-[#6d5f50]">For households and restaurants looking to buy high-quality food from as close as possible in the County.</p>
+      <h2 className="mb-3 text-4xl font-bold tracking-tight">Customer Information</h2>
+      <p className="mb-8 max-w-3xl text-[#6d5f50]">For households and restaurants who want exceptional local food with a predictable weekly routine.</p>
 
       <div className="mb-8 grid gap-4 md:grid-cols-2">
-        <div className="rounded-lg border border-[#d9cebf] bg-[#fffdf8] p-5">
-          <h3 className="mb-2 text-lg font-semibold">How It Works</h3>
+        <div className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
+          <h3 className="mb-2 text-lg font-semibold">How ordering works</h3>
           <ul className="list-disc space-y-1 pl-5 text-sm text-[#5f5244]">
-            <li>Browse what’s fresh each week from local vendors.</li>
+            <li>Browse weekly availability from County producers.</li>
             <li>Place your order through the CFC storefront.</li>
-            <li>Receive your food through scheduled pickup/delivery fulfillment.</li>
+            <li>Pick up or receive delivery on the weekly schedule.</li>
           </ul>
         </div>
-        <div className="rounded-lg border border-[#d9cebf] bg-[#fffdf8] p-5">
-          <h3 className="mb-2 text-lg font-semibold">Why We’re Doing This</h3>
+        <div className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
+          <h3 className="mb-2 text-lg font-semibold">What to expect</h3>
           <p className="text-sm leading-6 text-[#5f5244]">
-            To reconnect County citizens with exceptional local food, restore excitement around seasonality,
-            and make buying from your neighbors as convenient as shopping at a grocery store.
+            Product mix changes with seasonality, quality standards stay high, and communications stay clear so you always know what is available each week.
           </p>
         </div>
       </div>
 
       <div className="mb-8 flex flex-wrap gap-2">
-        <a href="https://cfc.localline.ca" target="_blank" rel="noreferrer" className="rounded-md border border-slate-900 px-4 py-2 text-sm font-semibold hover:bg-[#f3ece1]">Shop Now</a>
-        <a href="#newsletter" className="rounded-md border border-[#8FA27A] px-4 py-2 text-sm font-semibold text-[#2F5D50] hover:bg-[#edf3e8]">Join Newsletter</a>
-        <Link to="/our-vendors" className="rounded-md border border-[#8FA27A] px-4 py-2 text-sm font-semibold text-[#3F3228] hover:bg-[#f3ece1]">Browse Our Vendors</Link>
+        <a href="https://cfc.localline.ca" target="_blank" rel="noreferrer" className="rounded-full bg-[#2F5D50] px-5 py-2.5 text-sm font-semibold text-[#f7f4ed] hover:bg-[#264d43]">Shop now</a>
+        <Link to="/our-vendors" className="rounded-full border border-[#c8bca9] bg-[#fffdf8] px-5 py-2.5 text-sm font-semibold text-[#3F3228] hover:bg-[#f5efe4]">Browse vendors</Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <InfoBlock title="Weekly Schedule" points={[
-          'Placeholder: Weekly order window and cutoff timing',
-          'Placeholder: Fulfillment day(s) for pickup and delivery',
-          'Placeholder: Where/when customers receive updates',
+        <InfoBlock title="Weekly schedule" points={[
+          'Order window refreshes weekly with current availability.',
+          'Fulfillment timing is communicated clearly during checkout.',
+          'You’ll receive confirmation and pickup/delivery details automatically.',
         ]} />
-        <InfoBlock title="How We Represent Farmers" points={[
-          'Placeholder: Producer stories and product origin context',
-          'Placeholder: Seasonal curation and availability updates',
-          'Placeholder: Transparency standards for customer trust',
+        <InfoBlock title="Food standards" points={[
+          'We prioritize County-grown and County-made products first.',
+          'Seasonality is reflected honestly in weekly selections.',
+          'When supply is tight, we communicate substitutions or limits early.',
         ]} />
-        <InfoBlock title="Quality + Proximity Standards" points={[
-          'Placeholder: Highest-quality-first sourcing principles',
-          'Placeholder: As-close-as-possible local sourcing preference',
-          'Placeholder: How tradeoffs are handled when supply is limited',
+        <InfoBlock title="Communication" points={[
+          'Weekly updates highlight what is fresh and notable.',
+          'Customer messages focus on useful details, not noise.',
+          'Support is available through CFC for order issues and clarifications.',
         ]} />
       </div>
 
-      <div id="newsletter" className="mt-8 rounded-xl border border-[#d9cebf] bg-[#fffdf8] p-6">
-        <h3 className="mb-2 text-xl font-semibold">Newsletter (Wireframe)</h3>
-        <p className="text-[#6d5f50]">Join our newsletter for weekly updates on what’s fresh and available for sale in the County.</p>
+      <div id="newsletter" className="mt-8 rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
+        <h3 className="mb-2 text-xl font-semibold">Weekly newsletter</h3>
+        <p className="text-[#6d5f50]">Get a concise update each week on fresh products, featured vendors, and key notes before ordering closes.</p>
       </div>
     </section>
   )

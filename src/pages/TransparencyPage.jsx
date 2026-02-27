@@ -102,42 +102,29 @@ export default function TransparencyPage() {
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-12">
       <Link to="/" className="mb-6 inline-block text-sm text-[#6d5f50] hover:underline">← Back to Home</Link>
-      <h2 className="mb-3 text-3xl font-bold">Transparency Dashboard</h2>
-      <p className="mb-8 text-[#6d5f50]">Month-over-month financial trend with monthly drill-down.</p>
+      <h2 className="mb-3 text-4xl font-bold tracking-tight">Transparency Dashboard</h2>
+      <p className="mb-8 text-[#6d5f50]">A simple monthly view of operating metrics and payout visibility.</p>
 
       {error && <p className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700">Could not load transparency data ({error})</p>}
-
       {!error && !selected && <p className="text-[#6d5f50]">Loading transparency data...</p>}
 
       {selected && (
         <>
-          <div className="mb-6 rounded-lg border border-[#d9cebf] bg-[#fffdf8] p-5">
+          <div className="mb-6 rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-lg font-semibold">Monthly Trend</h3>
+              <h3 className="text-lg font-semibold">Monthly trend</h3>
               <div className="flex items-center gap-2">
-                <button
-                  className="rounded-md border border-[#d8ccbc] px-3 py-1.5 text-sm disabled:opacity-40"
-                  onClick={() => goToMonth(currentIndex - 1)}
-                  disabled={currentIndex <= 0}
-                >
-                  ← Previous Month
-                </button>
-                <button
-                  className="rounded-md border border-[#d8ccbc] px-3 py-1.5 text-sm disabled:opacity-40"
-                  onClick={() => goToMonth(currentIndex + 1)}
-                  disabled={currentIndex >= summaries.length - 1}
-                >
-                  Next Month →
-                </button>
+                <button className="rounded-full border border-[#d8ccbc] px-3 py-1.5 text-sm disabled:opacity-40" onClick={() => goToMonth(currentIndex - 1)} disabled={currentIndex <= 0}>← Previous</button>
+                <button className="rounded-full border border-[#d8ccbc] px-3 py-1.5 text-sm disabled:opacity-40" onClick={() => goToMonth(currentIndex + 1)} disabled={currentIndex >= summaries.length - 1}>Next →</button>
               </div>
             </div>
 
             <p className="mb-3 text-sm text-[#6d5f50]">
-              Viewing: <strong>{selected.month}</strong> ({selected.status || 'status n/a'})
+              Viewing <strong>{selected.month}</strong> ({selected.status || 'status n/a'})
             </p>
 
             <LineChart data={series} selectedMonth={selected.month} />
-            <p className="mt-3 text-xs text-[#7a6b5c]">Series: Operating Cash, Vendor Payouts, Total Products Sold (CAD).</p>
+            <p className="mt-3 text-xs text-[#7a6b5c]">Series shown in CAD: Operating Cash, Vendor Payouts, and Total Products Sold.</p>
           </div>
 
           <div className="mb-6 grid gap-3 md:grid-cols-3">
@@ -158,11 +145,6 @@ export default function TransparencyPage() {
             <MetricCard label="Operating Expenses" value={fmt(metrics.operating_expenses_cents)} />
             <MetricCard label="Net Operating Result" value={fmt(metrics.net_operating_result_cents)} />
             <MetricCard label="Ending Vendor Payable" value={fmt(metrics.ending_vendor_payable_cents)} />
-          </div>
-
-          <div className="mt-8 rounded-lg border border-[#d9cebf] bg-[#fffdf8] p-5">
-            <h3 className="mb-2 text-lg font-semibold">Raw JSON</h3>
-            <pre className="overflow-auto rounded bg-slate-900 p-4 text-xs text-slate-100">{JSON.stringify(selected, null, 2)}</pre>
           </div>
         </>
       )}
