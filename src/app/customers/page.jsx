@@ -3,6 +3,12 @@ import EmailCTA from '../../components/EmailCTA'
 import InfoBlock from '../../components/InfoBlock'
 import WeeklySchedule from '../../components/WeeklySchedule'
 
+export const metadata = {
+  title: 'Customer Information',
+  description: 'How to shop with County Farm Collective — weekly ordering, pickup and delivery schedules, and what to expect from Prince Edward County producers.',
+  alternates: { canonical: '/customers' },
+}
+
 const img = (src, cls = 'mx-auto h-12 w-auto') => <img src={src} alt="" className={cls} />
 
 const eventLabel = (label, sub, arrow = false) => (

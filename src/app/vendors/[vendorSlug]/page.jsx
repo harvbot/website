@@ -3,9 +3,32 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getVendorProducts } from '../../../lib/localline'
 import { vendorMap } from '../../../data/vendors'
+import { SITE_URL } from '../../../lib/site'
 
 export function generateStaticParams() {
   return vendorMap.map(v => ({ vendorSlug: v.slug }))
+}
+
+export async function generateMetadata({ params }) {
+  const { vendorSlug } = await params
+  const vendor = vendorMap.find(v => v.slug === vendorSlug)
+  if (!vendor) return {}
+
+  const description = vendor.description
+    ? vendor.description.replace(/<[^>]+>/g, '').trim().slice(0, 160)
+    : `${vendor.name} is a Prince Edward County producer selling through County Farm Collective's weekly local food storefront.`
+
+  return {
+    title: vendor.name,
+    description,
+    alternates: { canonical: `/vendors/${vendor.slug}` },
+    openGraph: {
+      title: `${vendor.name} | County Farm Collective`,
+      description,
+      url: `${SITE_URL}/vendors/${vendor.slug}`,
+      ...(vendor.logo && { images: [{ url: vendor.logo, alt: vendor.name }] }),
+    },
+  }
 }
 
 // --- Products (async, streamed) -------------------------------------------
@@ -119,8 +142,30 @@ export default async function VendorProfilePage({ params }) {
 
   const storefrontUrl = `https://cfc.localline.ca/resto/vendor/${vendor.slug}`
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: vendor.name,
+    ...(vendor.description && { description: vendor.description.replace(/<[^>]+>/g, '').trim() }),
+    url: `${SITE_URL}/vendors/${vendor.slug}`,
+    ...(vendor.logo && { image: vendor.logo }),
+    ...(vendor.location && {
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: vendor.location,
+        addressRegion: 'ON',
+        addressCountry: 'CA',
+      },
+    }),
+    areaServed: 'Prince Edward County, Ontario, Canada',
+  }
+
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link href="/vendors" className="mb-8 inline-block text-sm text-[#6d5f50] hover:underline">
         ← Back to Vendors
       </Link>

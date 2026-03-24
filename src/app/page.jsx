@@ -1,9 +1,36 @@
 import Link from "next/link";
 import EmailCTA from "../components/EmailCTA";
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "../lib/site";
+
+export const metadata = {
+  title: 'Local Food from Prince Edward County — Weekly Farm Collective',
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: SITE_URL },
+  openGraph: { title: SITE_NAME, description: SITE_DESCRIPTION, url: SITE_URL },
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  url: SITE_URL,
+  logo: `${SITE_URL}/cabbage.png`,
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Prince Edward County, Ontario, Canada',
+  },
+  sameAs: ['https://cfc.localline.ca'],
+}
 
 export default function LandingPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <section className="mx-auto w-full max-w-6xl px-6 pb-12 pt-14">
         <div className="relative overflow-hidden rounded-3xl border border-[#e2d8ca] bg-gradient-to-br from-[#fffdf8] to-[#f2e9db] p-8 shadow-[0_12px_32px_rgba(63,50,40,0.08)] md:p-12">
           <img

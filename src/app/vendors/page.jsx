@@ -4,6 +4,12 @@ import VendorLogo from "../../components/VendorLogo";
 import WeeklySchedule from "../../components/WeeklySchedule";
 import { vendorMap } from "../../data/vendors";
 
+export const metadata = {
+  title: 'Our Vendors',
+  description: 'Meet the Prince Edward County growers and makers behind County Farm Collective — farms, market gardens, and producers selling through our weekly storefront.',
+  alternates: { canonical: '/vendors' },
+}
+
 const img = (src, cls = "mx-auto h-12 w-auto") => (
   <img src={src} alt="" className={cls} />
 );

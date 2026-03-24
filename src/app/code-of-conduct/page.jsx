@@ -1,5 +1,11 @@
 import Link from 'next/link'
 
+export const metadata = {
+  title: 'Code of Conduct',
+  description: 'CFC membership standards, product eligibility, and the governance principles that guide County Farm Collective vendors and operations.',
+  alternates: { canonical: '/code-of-conduct' },
+}
+
 const membershipRules = [
   'Members must be active food producers, processors, or value-added makers aligned with CFC\u2019s local-first mission.',
   'Priority is given to producers operating in Prince Edward County; adjacent regions may be considered if they strengthen (not dilute) local resilience.',
