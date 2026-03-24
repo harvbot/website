@@ -102,14 +102,8 @@ async function fetchAll(path) {
 // Vendors
 // ---------------------------------------------------------------------------
 
-export const getVendor = unstable_cache(
-  (vendorId) => get(`/vendors/${vendorId}`),
-  ['localline-vendor'],
-  { revalidate: 3600 },
-)
-
 export const getVendorProducts = unstable_cache(
-  (vendorId) => fetchAll(`/products?vendor=${vendorId}`),
+  (vendorId) => fetchAll(`/products?vendors=${vendorId}`),
   ['localline-vendor-products'],
   { revalidate: 3600 },
 )

@@ -66,21 +66,18 @@ const vendors = raw
     slug: slugify(v.name),
     logo: v.image_full || null,
     location: v.location || null,
-    // lat/lng not available from LocalLine API — populate manually or via geocoding
-    lat: null,
-    lng: null,
+    description: v.description || null,
   }))
   .sort((a, b) => a.name.localeCompare(b.name))
 
 console.log(`Fetched ${vendors.length} vendors:`)
 vendors.forEach(v =>
-  console.log(`  [${v.id}] ${v.name}  logo: ${v.logo ? '✓' : '✗'}  location: ${v.location ?? '(none)'}`)
+  console.log(`  [${v.id}] ${v.name}  logo: ${v.logo ? '✓' : '✗'}  desc: ${v.description ? '✓' : '✗'}  location: ${v.location ?? '(none)'}`)
 )
 
-function q(s) { return s == null ? 'null' : `'${String(s).replace(/'/g, "\\'")}'` }
-
+// Use JSON.stringify for description to safely handle HTML, quotes, newlines
 function serializeVendor(v) {
-  return `  { id: ${v.id}, name: ${q(v.name)}, slug: ${q(v.slug)}, logo: ${q(v.logo)}, location: ${q(v.location)}, lat: ${v.lat ?? 'null'}, lng: ${v.lng ?? 'null'} },`
+  return `  { id: ${v.id}, name: ${JSON.stringify(v.name)}, slug: ${JSON.stringify(v.slug)}, logo: ${JSON.stringify(v.logo)}, location: ${JSON.stringify(v.location)}, description: ${JSON.stringify(v.description)} },`
 }
 
 const mapBlock =

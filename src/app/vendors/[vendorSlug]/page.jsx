@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getVendor, getVendorProducts } from '../../../lib/localline'
+import { getVendorProducts } from '../../../lib/localline'
 import { vendorMap } from '../../../data/vendors'
 
 export function generateStaticParams() {
@@ -41,20 +41,13 @@ export default async function VendorProfilePage({ params }) {
   const vendor = vendorMap.find(v => v.slug === vendorSlug)
   if (!vendor) notFound()
 
-  const [detail, products] = await Promise.allSettled([
-    getVendor(vendor.id),
-    getVendorProducts(vendor.id),
-  ])
+  let productList = []
+  try {
+    productList = await getVendorProducts(vendor.id)
+  } catch (err) {
+    console.error(`Failed to load products for vendor ${vendor.id}:`, err)
+  }
 
-  const vendorDetail = detail.status === 'fulfilled' ? detail.value : {}
-  if (detail.status === 'rejected') console.error(`Failed to load vendor ${vendor.id}:`, detail.reason)
-
-  const productList = products.status === 'fulfilled' ? products.value : []
-  if (products.status === 'rejected') console.error(`Failed to load products for vendor ${vendor.id}:`, products.reason)
-
-  const bio = vendorDetail.bio || vendorDetail.description || vendorDetail.about || null
-  const location = vendorDetail.city || vendorDetail.location || null
-  const logo = vendorDetail.logo || vendorDetail.profile_image || vendorDetail.image || null
   const storefrontUrl = `https://cfc.localline.ca/vendors/${vendor.id}`
 
   const byCategory = productList.reduce((acc, p) => {
@@ -75,26 +68,26 @@ export default async function VendorProfilePage({ params }) {
       {/* Header */}
       <div className="mb-10 overflow-hidden rounded-3xl border border-[#e2d8ca] bg-gradient-to-br from-[#fffdf8] to-[#f2e9db] p-8 shadow-[0_12px_32px_rgba(63,50,40,0.08)] md:p-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
-          {logo && (
+          {vendor.logo && (
             <div className="shrink-0">
               <img
-                src={logo}
+                src={vendor.logo}
                 alt={vendor.name}
                 className="h-24 w-24 rounded-2xl border border-[#e2d8ca] bg-white object-contain p-2 shadow-sm"
               />
             </div>
           )}
           <div className="min-w-0 flex-1">
-            {location && (
+            {vendor.location && (
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-amber">
-                {location} · Prince Edward County
+                {vendor.location}
               </p>
             )}
             <h1 className="font-amatic text-5xl font-bold text-[#3F3228] md:text-6xl">{vendor.name}</h1>
-            {bio && (
+            {vendor.description && (
               <div
                 className="mt-4 max-w-2xl text-base leading-7 text-[#5f5244] [&_a]:text-brand-primary [&_a]:underline [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5"
-                dangerouslySetInnerHTML={{ __html: bio }}
+                dangerouslySetInnerHTML={{ __html: vendor.description }}
               />
             )}
             <div className="mt-6">
