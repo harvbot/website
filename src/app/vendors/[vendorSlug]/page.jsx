@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getVendors, getVendorProducts } from '../../../lib/vendors-api'
+import { getVendors, getVendorProducts } from '../../../lib/localline'
 import { slugify } from '../../../utils/strings'
 
 export async function generateStaticParams() {
