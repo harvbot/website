@@ -27,16 +27,11 @@ export default function VendorsPage() {
 
       <a href="mailto:info@countyfarmcollective.com?subject=Vendor%20Inquiry%20-%20County%20Farm%20Collective" className="mb-8 inline-flex rounded-full bg-[#2F5D50] px-5 py-2.5 text-sm font-semibold text-[#f7f4ed] hover:bg-[#264d43]">Email to get started</a>
 
-      <div className="mb-8 grid gap-4 md:grid-cols-2">
-        <Link to="/code-of-conduct" className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 transition hover:border-[#8FA27A] hover:bg-[#f8f4ec]">
+      <div className="mb-8">
+        <Link to="/code-of-conduct" className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 transition hover:border-[#8FA27A] hover:bg-[#f8f4ec] inline-block w-full md:w-auto">
           <p className="text-xs uppercase tracking-[0.16em] text-[#8a7b69]">Governance</p>
           <h3 className="mt-2 text-lg font-semibold">Code of Conduct</h3>
           <p className="mt-2 text-sm text-[#5f5244]">Membership standards, product eligibility, and enforcement guardrails.</p>
-        </Link>
-        <Link to="/transparency" className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 transition hover:border-[#8FA27A] hover:bg-[#f8f4ec]">
-          <p className="text-xs uppercase tracking-[0.16em] text-[#8a7b69]">Reporting</p>
-          <h3 className="mt-2 text-lg font-semibold">Transparency Dashboard</h3>
-          <p className="mt-2 text-sm text-[#5f5244]">Monthly metrics, payout visibility, and operating trend context.</p>
         </Link>
       </div>
 

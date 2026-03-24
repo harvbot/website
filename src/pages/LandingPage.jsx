@@ -22,7 +22,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-6xl gap-6 px-6 pb-12 md:grid-cols-3">
+      <section className="mx-auto grid w-full max-w-6xl gap-6 px-6 pb-12 md:grid-cols-2">
         <article className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
           <h3 className="mb-2 text-xl font-semibold">For customers</h3>
           <p className="mb-5 text-sm leading-6 text-[#6d5f50]">Simple weekly ordering, clear pickup/delivery expectations, and access to outstanding County producers.</p>
@@ -33,12 +33,6 @@ export default function LandingPage() {
           <h3 className="mb-2 text-xl font-semibold">For vendors</h3>
           <p className="mb-5 text-sm leading-6 text-[#6d5f50]">Stay focused on production while CFC handles merchandising, communication, and weekly order flow.</p>
           <Link to="/vendors" className="text-sm font-semibold text-[#2F5D50] hover:underline">See vendor details →</Link>
-        </article>
-
-        <article className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
-          <h3 className="mb-2 text-xl font-semibold">Open reporting</h3>
-          <p className="mb-5 text-sm leading-6 text-[#6d5f50]">Track monthly operating metrics and vendor payout transparency in one place.</p>
-          <Link to="/transparency" className="text-sm font-semibold text-[#2F5D50] hover:underline">View dashboard →</Link>
         </article>
       </section>
 
