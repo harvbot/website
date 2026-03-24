@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { subscribe } from '../lib/actions'
 
 export default function EmailCTA({ heading, subheading, compact = false }) {
   const [firstName, setFirstName] = useState('')
@@ -12,26 +13,17 @@ export default function EmailCTA({ heading, subheading, compact = false }) {
     setStatus('loading')
     setErrorMsg('')
 
-    try {
-      const res = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, firstName }),
-      })
-      if (res.status === 409) {
-        setStatus('already_exists')
-        return
-      }
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || 'Something went wrong')
-      }
+    const result = await subscribe({ email, firstName })
+
+    if (result.ok) {
       setStatus('success')
       setFirstName('')
       setEmail('')
-    } catch (err) {
+    } else if (result.error === 'already_exists') {
+      setStatus('already_exists')
+    } else {
       setStatus('error')
-      setErrorMsg(err.message)
+      setErrorMsg(result.error || 'Something went wrong')
     }
   }
 
