@@ -33,52 +33,55 @@ export async function generateMetadata({ params }) {
 
 // --- Products (async, streamed) -------------------------------------------
 
+// Aspect-ratio buckets for the skeleton — varied heights simulate masonry
+const SKELETON_RATIOS = ['4/3', '3/4', '1/1', '3/4', '4/3', '1/1', '3/4', '4/3', '1/1', '4/3', '3/4', '1/1']
+
 function ProductCard({ product }) {
   const img =
     product.images?.[0]?.image ||
     product.images?.[0]?.url ||
+    product.images?.[0]?.src ||
     product.image_url ||
+    product.image ||
     null
 
+  const price = product.price != null
+    ? `$${parseFloat(product.price).toFixed(2)}`
+    : null
+
+  if (!img) {
+    return (
+      <div className="break-inside-avoid">
+        <div className="flex aspect-[4/3] w-full items-center justify-center bg-[#ede5d8]">
+          <div className="px-3 text-center">
+            <p className="text-xs font-semibold leading-snug text-[#6d5f50]">{product.name}</p>
+            {price && <p className="mt-0.5 text-xs text-[#9a8a79]">{price}</p>}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="overflow-hidden rounded-xl border border-[#e2d8ca] bg-[#fffdf8] shadow-[0_4px_12px_rgba(63,50,40,0.05)]">
-      {img ? (
-        <div className="aspect-square w-full overflow-hidden bg-[#f2e9db]">
-          <img src={img} alt={product.name} className="h-full w-full object-cover" />
-        </div>
-      ) : (
-        <div className="flex aspect-square w-full items-center justify-center bg-gradient-to-br from-[#f2e9db] to-[#e8ddd0]">
-          <span className="text-4xl opacity-30">🌿</span>
-        </div>
-      )}
-      <div className="p-3">
-        <p className="text-sm font-semibold text-[#3F3228]">{product.name}</p>
-        {product.category_name && (
-          <p className="mt-0.5 text-xs text-[#8a7b69]">{product.category_name}</p>
-        )}
+    <div className="break-inside-avoid relative">
+      <img src={img} alt={product.name} className="block w-full" />
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-2.5 pb-2.5 pt-8">
+        <p className="text-xs font-semibold leading-tight text-white">{product.name}</p>
+        {price && <p className="mt-0.5 text-xs text-white/75">{price}</p>}
       </div>
     </div>
   )
 }
 
 async function VendorProducts({ vendorId, storefrontUrl }) {
-  let productList = []
+  let products = []
   try {
-    productList = await getVendorProducts(vendorId)
+    products = await getVendorProducts(vendorId)
   } catch (err) {
     console.error(`Failed to load products for vendor ${vendorId}:`, err)
   }
 
-  const byCategory = productList.reduce((acc, p) => {
-    const cat = p.category_name || p.category || 'Products'
-    if (!acc[cat]) acc[cat] = []
-    acc[cat].push(p)
-    return acc
-  }, {})
-
-  const categories = Object.entries(byCategory)
-
-  if (categories.length === 0) {
+  if (products.length === 0) {
     return (
       <div className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-8 text-center text-sm text-[#8a7b69]">
         Product listings are managed weekly on the CFC storefront.{' '}
@@ -95,16 +98,9 @@ async function VendorProducts({ vendorId, storefrontUrl }) {
   }
 
   return (
-    <div className="space-y-10">
-      {categories.map(([category, items]) => (
-        <div key={category}>
-          <h2 className="mb-4 text-xl font-semibold text-[#3F3228]">{category}</h2>
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {items.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
+    <div className="columns-2 sm:columns-3 lg:columns-4" style={{ columnGap: 0 }}>
+      {products.map(product => (
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
   )
@@ -112,20 +108,10 @@ async function VendorProducts({ vendorId, storefrontUrl }) {
 
 function ProductsSkeleton() {
   return (
-    <div className="space-y-10">
-      {[1, 2].map(i => (
-        <div key={i}>
-          <div className="mb-4 h-6 w-32 animate-pulse rounded-md bg-[#e8ddd0]" />
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, j) => (
-              <div key={j} className="overflow-hidden rounded-xl border border-[#e2d8ca] bg-[#fffdf8]">
-                <div className="aspect-square w-full animate-pulse bg-[#f2e9db]" />
-                <div className="p-3">
-                  <div className="h-4 w-3/4 animate-pulse rounded bg-[#e8ddd0]" />
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="columns-2 sm:columns-3 lg:columns-4" style={{ columnGap: 0 }}>
+      {SKELETON_RATIOS.map((ratio, i) => (
+        <div key={i} className="break-inside-avoid" style={{ aspectRatio: ratio }}>
+          <div className="h-full w-full animate-pulse bg-[#e8ddd0]" />
         </div>
       ))}
     </div>
