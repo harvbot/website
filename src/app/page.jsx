@@ -1,8 +1,5 @@
 import Link from "next/link";
 import EmailCTA from "../components/EmailCTA";
-import VendorLogo from "../components/VendorLogo";
-import { featuredVendors, vendorMap } from "../data/vendors";
-import { slugify } from "../utils/strings";
 
 export default function LandingPage() {
   return (
@@ -51,7 +48,7 @@ export default function LandingPage() {
         />
       </section>
 
-      <section className="mx-auto grid w-full max-w-6xl gap-6 px-6 pb-12 md:grid-cols-2">
+      <section className="mx-auto grid w-full max-w-6xl gap-6 px-6 pb-14 md:grid-cols-2">
         <article className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
           <img src="/pea.png" alt="" className="mb-3 h-14 w-auto" />
           <h3 className="mb-2 text-xl font-semibold">For customers</h3>
@@ -81,54 +78,6 @@ export default function LandingPage() {
             See vendor details →
           </Link>
         </article>
-      </section>
-
-      <section className="mx-auto w-full max-w-6xl px-6 pb-14">
-        <div className="mb-5 flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-[#3F3228]">
-            Featured County Vendors
-          </h3>
-          <Link
-            href="/vendors"
-            className="text-sm font-semibold text-brand-primary hover:underline"
-          >
-            View all vendors →
-          </Link>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {featuredVendors.map((vendor) => (
-            <article
-              key={vendor.name}
-              className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-5 shadow-[0_8px_24px_rgba(63,50,40,0.06)]"
-            >
-              <div className="mb-3">
-                <VendorLogo
-                  name={vendor.name}
-                  src={vendorMap.find(v => v.name === vendor.name)?.logo ?? null}
-                  className="h-14 w-14"
-                />
-              </div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-brand-amber">
-                {vendor.location}
-              </p>
-              <h4 className="mt-1 text-xl font-semibold text-[#3F3228]">
-                {vendor.name}
-              </h4>
-              <p className="mt-2 text-sm text-brand-primary">
-                {vendor.specialty}
-              </p>
-              <p className="mt-3 text-sm leading-6 text-[#6d5f50]">
-                {vendor.note}
-              </p>
-              <Link
-                href={`/vendors/${slugify(vendor.name)}`}
-                className="mt-4 inline-flex text-sm font-semibold text-brand-primary hover:underline"
-              >
-                View vendor
-              </Link>
-            </article>
-          ))}
-        </div>
       </section>
     </>
   );

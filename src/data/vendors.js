@@ -16,9 +16,3 @@ export const vendorMap = [
 ]
 
 export const vendorList = vendorMap.map(v => v.name)
-
-export const featuredVendors = [
-  { name: 'Fiddlehead',     location: 'Wellington',          specialty: 'Seasonal vegetables',  note: 'Field-grown produce, harvested weekly.' },
-  { name: 'Nomad Mushroom', location: 'Picton',              specialty: 'Specialty mushrooms',   note: 'Fresh cultivated mushrooms with peak flavor.' },
-  { name: 'Paper Kite Farm', location: 'Prince Edward County', specialty: 'Mixed farm staples', note: 'Reliable staples and small-batch seasonal harvests.' },
-]
