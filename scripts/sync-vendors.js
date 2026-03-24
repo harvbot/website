@@ -63,7 +63,7 @@ const vendors = raw
   .map(v => ({
     id: v.id,
     name: v.name,
-    slug: slugify(v.name),
+    slug: v.slug || slugify(v.name), // prefer LocalLine's own slug
     logo: v.image_full || null,
     location: v.location || null,
     description: v.description || null,
