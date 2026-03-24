@@ -1,14 +1,14 @@
 import Link from "next/link";
-import InfoBlock from "../../components/InfoBlock";
 import VendorLogo from "../../components/VendorLogo";
 import WeeklySchedule from "../../components/WeeklySchedule";
 import { vendorMap } from "../../data/vendors";
 
 export const metadata = {
-  title: 'Our Vendors',
-  description: 'Meet the Prince Edward County growers and makers behind County Farm Collective — farms, market gardens, and producers selling through our weekly storefront.',
-  alternates: { canonical: '/vendors' },
-}
+  title: "Our Vendors",
+  description:
+    "Meet the Prince Edward County growers and makers behind County Farm Collective — farms, market gardens, and producers selling through our weekly storefront.",
+  alternates: { canonical: "/vendors" },
+};
 
 const img = (src, cls = "mx-auto h-12 w-auto") => (
   <img src={src} alt="" className={cls} />
@@ -71,28 +71,87 @@ export default function VendorsPage() {
         intro email and we'll guide the next step.
       </p>
 
-      <div className="mb-8 grid gap-4 md:grid-cols-2">
+      <div className="mb-8 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
-          <h3 className="mb-2 text-lg font-semibold">How it works</h3>
-          <ul className="list-disc space-y-1 pl-5 text-sm text-[#5f5244]">
-            <li>Share your product list and expected weekly availability.</li>
-            <li>
-              CFC supports merchandising, communication, and order coordination.
+          <p className="mb-3 text-xs uppercase tracking-[0.16em] text-[#8a7b69]">
+            Operations
+          </p>
+          <h3 className="mb-4 text-lg font-semibold">Process</h3>
+          <ol className="space-y-3 text-sm text-[#5f5244]">
+            <li className="flex gap-3">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#e8f0e4] text-xs font-bold text-[#2F5D50]">
+                1
+              </span>
+              <span>Share your product list and weekly inventory.</span>
             </li>
-            <li>
-              Products move through a weekly fulfillment rhythm for County
-              customers.
+            <li className="flex gap-3">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#e8f0e4] text-xs font-bold text-[#2F5D50]">
+                2
+              </span>
+              <span>Set your price for each product.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#e8f0e4] text-xs font-bold text-[#2F5D50]">
+                3
+              </span>
+              <span>Get your consolidated pick list ahead of order day.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#e8f0e4] text-xs font-bold text-[#2F5D50]">
+                4
+              </span>
+              <span>Drop off your products for fulfillment.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#e8f0e4] text-xs font-bold text-[#2F5D50]">
+                5
+              </span>
+              <span>Get paid.</span>
+            </li>
+          </ol>
+        </div>
+        <div className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
+          <p className="mb-3 text-xs uppercase tracking-[0.16em] text-[#8a7b69]">
+            Insights
+          </p>
+          <h3 className="mb-4 text-lg font-semibold">How it works</h3>
+          <ul className="space-y-3 text-sm text-[#5f5244]">
+            <li className="flex items-start gap-2">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2F5D50]" />
+              No enrolment fee — all sales are consignment based.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2F5D50]" />
+              CFC adds a 20% consignment fee to each sale.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2F5D50]" />
+              Products are centralized in Picton, combined per order, then
+              fulfilled across the County.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2F5D50]" />
+              Payouts occur one week following deliveries, regardless of terms
+              of sale.
             </li>
           </ul>
         </div>
-        <div className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
-          <h3 className="mb-2 text-lg font-semibold">Program focus</h3>
-          <p className="text-sm leading-6 text-[#5f5244]">
-            We help strong producers stay focused on growing and making while
-            CFC handles customer-facing coordination, repeat purchasing, and
-            transparent payout flow.
+        <Link
+          href="/code-of-conduct"
+          className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 shadow-[0_8px_24px_rgba(63,50,40,0.06)] transition hover:border-brand-sage hover:bg-[#f8f4ec]"
+        >
+          <p className="mb-3 text-xs uppercase tracking-[0.16em] text-[#8a7b69]">
+            Governance
           </p>
-        </div>
+          <h3 className="mb-4 text-lg font-semibold">Code of Conduct</h3>
+          <p className="text-sm text-[#5f5244]">
+            Membership standards, product eligibility, and enforcement
+            guardrails.
+          </p>
+          <p className="mt-4 text-sm font-medium text-[#2F5D50]">
+            Read the full document →
+          </p>
+        </Link>
       </div>
 
       <div className="mb-8">
@@ -107,52 +166,12 @@ export default function VendorsPage() {
         Email to get started
       </a>
 
-      <div className="mb-8">
-        <Link
-          href="/code-of-conduct"
-          className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 transition hover:border-brand-sage hover:bg-[#f8f4ec] inline-block w-full md:w-auto"
-        >
-          <p className="text-xs uppercase tracking-[0.16em] text-[#8a7b69]">
-            Governance
-          </p>
-          <h3 className="mt-2 text-lg font-semibold">Code of Conduct</h3>
-          <p className="mt-2 text-sm text-[#5f5244]">
-            Membership standards, product eligibility, and enforcement
-            guardrails.
-          </p>
-        </Link>
-      </div>
-
-      <div className="mb-8 grid gap-4 md:grid-cols-3">
-        <InfoBlock
-          title="Weekly cadence"
-          points={[
-            "Weekly intake and fulfillment schedule is shared in advance.",
-            "Vendors get clear deadlines for availability updates.",
-            "Operational notes are consolidated into one weekly flow.",
-          ]}
-        />
-        <InfoBlock
-          title="Pricing + payout"
-          points={[
-            "Pricing expectations are reviewed before products go live.",
-            "Payout calculations are handled with a transparent ledger workflow.",
-            "Weekly payout summaries are documented and traceable.",
-          ]}
-        />
-        <InfoBlock
-          title="Onboarding"
-          points={[
-            "Initial fit call and product review.",
-            "Basic catalog setup and operating expectations.",
-            "First-cycle support through listing to payout completion.",
-          ]}
-        />
-      </div>
-
       <div>
         <h3 className="mb-4 text-2xl font-bold text-[#3F3228]">Our Vendors</h3>
-        <p className="mb-6 max-w-3xl text-sm text-[#6d5f50]">Explore the producers currently on the County Farm Collective platform.</p>
+        <p className="mb-6 max-w-3xl text-sm text-[#6d5f50]">
+          Explore the producers currently on the County Farm Collective
+          platform.
+        </p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {vendorMap.map((vendor) => (
             <Link
@@ -160,7 +179,11 @@ export default function VendorsPage() {
               href={`/vendors/${vendor.slug}`}
               className="flex items-center gap-3 rounded-lg border border-[#d9cebf] bg-[#fffdf8] px-4 py-3 text-sm font-medium text-[#3F3228] hover:bg-[#f3ece1]"
             >
-              <VendorLogo name={vendor.name} src={vendor.logo} className="h-10 w-10" />
+              <VendorLogo
+                name={vendor.name}
+                src={vendor.logo}
+                className="h-10 w-10"
+              />
               <span>{vendor.name}</span>
             </Link>
           ))}
