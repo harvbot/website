@@ -5,7 +5,7 @@ export default function InfoBlock({ title, points }) {
       <ul className="space-y-2 text-sm leading-6 text-[#5f5244]">
         {points.map((p) => (
           <li key={p} className="flex gap-2">
-            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#8FA27A]" />
+            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brand-sage" />
             <span>{p}</span>
           </li>
         ))}
