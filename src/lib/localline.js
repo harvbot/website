@@ -105,7 +105,7 @@ async function fetchAll(path) {
 export const getVendorProducts = unstable_cache(
   (vendorId) => fetchAll(`/products?vendors=${vendorId}`),
   ['localline-vendor-products'],
-  { revalidate: 3600 },
+  { revalidate: 21600 }, // 6h — products change on the weekly cycle
 )
 
 // ---------------------------------------------------------------------------

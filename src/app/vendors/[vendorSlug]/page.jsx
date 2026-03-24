@@ -48,7 +48,7 @@ export default async function VendorProfilePage({ params }) {
     console.error(`Failed to load products for vendor ${vendor.id}:`, err)
   }
 
-  const storefrontUrl = `https://cfc.localline.ca/vendors/${vendor.id}`
+  const storefrontUrl = `https://cfc.localline.ca/resto/vendor/${vendor.slug}`
 
   const byCategory = productList.reduce((acc, p) => {
     const cat = p.category_name || p.category || 'Products'
