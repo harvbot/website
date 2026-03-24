@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// One-time script: fetches vendor list from LocalLine and writes static mapping
-// to src/data/vendors.js. Re-run whenever vendors are added or removed.
+// Syncs vendor id, name, slug, and logo from LocalLine into src/data/vendors.js.
+// Re-run whenever vendors are added, removed, or their logos change.
 //
 // Usage: node scripts/sync-vendors.js
 
@@ -12,9 +12,8 @@ const __dir = dirname(fileURLToPath(import.meta.url))
 const root = resolve(__dir, '..')
 
 // Load .env.local
-const envPath = resolve(root, '.env.local')
 try {
-  readFileSync(envPath, 'utf8')
+  readFileSync(resolve(root, '.env.local'), 'utf8')
     .split('\n')
     .forEach(line => {
       const [key, ...rest] = line.split('=')
@@ -61,34 +60,44 @@ const token = await auth()
 const raw = await fetchAll(token, '/vendors')
 
 const vendors = raw
-  .map(v => ({ id: v.id, name: v.name, slug: slugify(v.name) }))
+  .map(v => ({
+    id: v.id,
+    name: v.name,
+    slug: slugify(v.name),
+    logo: v.image_full || null,
+    location: v.location || null,
+    // lat/lng not available from LocalLine API — populate manually or via geocoding
+    lat: null,
+    lng: null,
+  }))
   .sort((a, b) => a.name.localeCompare(b.name))
 
 console.log(`Fetched ${vendors.length} vendors:`)
-vendors.forEach(v => console.log(`  [${v.id}] ${v.name}  →  ${v.slug}`))
+vendors.forEach(v =>
+  console.log(`  [${v.id}] ${v.name}  logo: ${v.logo ? '✓' : '✗'}  location: ${v.location ?? '(none)'}`)
+)
 
-// Read current file, replace the vendorList + add vendorMap
-const current = readFileSync(resolve(root, 'src/data/vendors.js'), 'utf8')
+function q(s) { return s == null ? 'null' : `'${String(s).replace(/'/g, "\\'")}'` }
 
-const mapLines = vendors.map(v => `  { id: ${v.id}, name: '${v.name}', slug: '${v.slug}' },`).join('\n')
-const mapBlock = `export const vendorMap = [\n${mapLines}\n]\n`
+function serializeVendor(v) {
+  return `  { id: ${v.id}, name: ${q(v.name)}, slug: ${q(v.slug)}, logo: ${q(v.logo)}, location: ${q(v.location)}, lat: ${v.lat ?? 'null'}, lng: ${v.lng ?? 'null'} },`
+}
 
-const newVendorList = `export const vendorList = vendorMap.map(v => v.name)\n`
+const mapBlock =
+  `// Static vendor registry — run \`node scripts/sync-vendors.js\` to refresh.\n` +
+  `export const vendorMap = [\n` +
+  vendors.map(serializeVendor).join('\n') +
+  `\n]\n`
 
-// Replace existing vendorList export and inject vendorMap before it (idempotent)
-let updated = current
-  .replace(/^export const vendorList =.*$/m, '// vendorList replaced — see vendorMap below')
-  .replace(/\/\/ vendorList replaced.*\n/, '')
+const rest = readFileSync(resolve(root, 'src/data/vendors.js'), 'utf8')
+  // Strip everything up to and including the vendorMap block and vendorList line
+  .replace(/\/\/ Static vendor registry[\s\S]*?export const vendorList = vendorMap\.map\(v => v\.name\)\n/, '')
+  .trimStart()
 
-// Prepend vendorMap + new vendorList at the top (after any existing imports)
-const insertAt = updated.indexOf('\nexport ')
-updated =
-  updated.slice(0, insertAt === -1 ? 0 : insertAt) +
-  '\n' + mapBlock + '\n' + newVendorList +
-  updated.slice(insertAt === -1 ? 0 : insertAt)
+const output =
+  mapBlock +
+  `\nexport const vendorList = vendorMap.map(v => v.name)\n\n` +
+  rest
 
-// Remove duplicate vendorList if present
-updated = updated.replace(/export const vendorList = \[[\s\S]*?\]\n/m, '')
-
-writeFileSync(resolve(root, 'src/data/vendors.js'), updated)
+writeFileSync(resolve(root, 'src/data/vendors.js'), output)
 console.log('\nWrote src/data/vendors.js')

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import EmailCTA from "../components/EmailCTA";
 import VendorLogo from "../components/VendorLogo";
-import { featuredVendors, getVendorLogo } from "../data/vendors";
+import { featuredVendors, vendorMap } from "../data/vendors";
 import { slugify } from "../utils/strings";
 
 export default function LandingPage() {
@@ -104,7 +104,7 @@ export default function LandingPage() {
               <div className="mb-3">
                 <VendorLogo
                   name={vendor.name}
-                  src={getVendorLogo(vendor.name)}
+                  src={vendorMap.find(v => v.name === vendor.name)?.logo ?? null}
                   className="h-14 w-14"
                 />
               </div>

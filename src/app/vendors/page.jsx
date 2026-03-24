@@ -2,8 +2,7 @@ import Link from "next/link";
 import InfoBlock from "../../components/InfoBlock";
 import VendorLogo from "../../components/VendorLogo";
 import WeeklySchedule from "../../components/WeeklySchedule";
-import { getVendorLogo, vendorList } from "../../data/vendors";
-import { slugify } from "../../utils/strings";
+import { vendorMap } from "../../data/vendors";
 
 const img = (src, cls = "mx-auto h-12 w-auto") => (
   <img src={src} alt="" className={cls} />
@@ -149,14 +148,14 @@ export default function VendorsPage() {
         <h3 className="mb-4 text-2xl font-bold text-[#3F3228]">Our Vendors</h3>
         <p className="mb-6 max-w-3xl text-sm text-[#6d5f50]">Explore the producers currently on the County Farm Collective platform.</p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {vendorList.map((vendor) => (
+          {vendorMap.map((vendor) => (
             <Link
-              key={vendor}
-              href={`/vendors/${slugify(vendor)}`}
+              key={vendor.slug}
+              href={`/vendors/${vendor.slug}`}
               className="flex items-center gap-3 rounded-lg border border-[#d9cebf] bg-[#fffdf8] px-4 py-3 text-sm font-medium text-[#3F3228] hover:bg-[#f3ece1]"
             >
-              <VendorLogo name={vendor} src={getVendorLogo(vendor)} className="h-10 w-10" />
-              <span>{vendor}</span>
+              <VendorLogo name={vendor.name} src={vendor.logo} className="h-10 w-10" />
+              <span>{vendor.name}</span>
             </Link>
           ))}
         </div>
