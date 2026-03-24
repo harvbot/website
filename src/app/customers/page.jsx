@@ -62,7 +62,7 @@ export default function CustomersPage() {
 
       <div className="mb-8 flex flex-wrap gap-2">
         <a href="https://cfc.localline.ca" target="_blank" rel="noreferrer" className="rounded-full bg-brand-primary px-5 py-2.5 text-sm font-semibold text-[#f7f4ed] hover:bg-brand-primary-dark">Shop now</a>
-        <Link href="/our-vendors" className="rounded-full border border-[#c8bca9] bg-[#fffdf8] px-5 py-2.5 text-sm font-semibold text-[#3F3228] hover:bg-[#f5efe4]">Browse vendors</Link>
+        <Link href="/vendors" className="rounded-full border border-[#c8bca9] bg-[#fffdf8] px-5 py-2.5 text-sm font-semibold text-[#3F3228] hover:bg-[#f5efe4]">Browse vendors</Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">

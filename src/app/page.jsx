@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import EmailCTA from '../components/EmailCTA'
-import VendorLogo from '../components/VendorLogo'
-import { featuredVendors, getVendorLogo } from '../data/vendors'
-import { slugify } from '../utils/strings'
+import Link from "next/link";
+import EmailCTA from "../components/EmailCTA";
+import VendorLogo from "../components/VendorLogo";
+import { featuredVendors, getVendorLogo } from "../data/vendors";
+import { slugify } from "../utils/strings";
 
 export default function LandingPage() {
   return (
@@ -21,9 +21,9 @@ export default function LandingPage() {
             PEC&apos;s harvest, in one place.
           </h2>
           <p className="max-w-3xl text-base leading-7 text-[#5f5244] md:text-lg">
-            We connect Prince Edward County growers and makers directly to local
-            households every week — with one easy storefront, one coordinated
-            fulfillment flow, and zero supermarket vibe.
+            We connect Prince Edward County growers and makers directly to
+            locals every week — with one easy storefront, one coordinated
+            fulfillment flow, and the freshest possible food.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <a
@@ -59,7 +59,10 @@ export default function LandingPage() {
             Simple weekly ordering, clear pickup/delivery expectations, and
             access to outstanding County producers.
           </p>
-          <Link href="/customers" className="text-sm font-semibold text-brand-primary hover:underline">
+          <Link
+            href="/customers"
+            className="text-sm font-semibold text-brand-primary hover:underline"
+          >
             Learn more →
           </Link>
         </article>
@@ -71,7 +74,10 @@ export default function LandingPage() {
             Stay focused on production while CFC handles merchandising,
             communication, and weekly order flow.
           </p>
-          <Link href="/vendors" className="text-sm font-semibold text-brand-primary hover:underline">
+          <Link
+            href="/vendors"
+            className="text-sm font-semibold text-brand-primary hover:underline"
+          >
             See vendor details →
           </Link>
         </article>
@@ -79,8 +85,13 @@ export default function LandingPage() {
 
       <section className="mx-auto w-full max-w-6xl px-6 pb-14">
         <div className="mb-5 flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-[#3F3228]">Featured County Vendors</h3>
-          <Link href="/our-vendors" className="text-sm font-semibold text-brand-primary hover:underline">
+          <h3 className="text-2xl font-bold text-[#3F3228]">
+            Featured County Vendors
+          </h3>
+          <Link
+            href="/vendors"
+            className="text-sm font-semibold text-brand-primary hover:underline"
+          >
             View all vendors →
           </Link>
         </div>
@@ -91,14 +102,26 @@ export default function LandingPage() {
               className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-5 shadow-[0_8px_24px_rgba(63,50,40,0.06)]"
             >
               <div className="mb-3">
-                <VendorLogo name={vendor.name} src={getVendorLogo(vendor.name)} className="h-14 w-14" />
+                <VendorLogo
+                  name={vendor.name}
+                  src={getVendorLogo(vendor.name)}
+                  className="h-14 w-14"
+                />
               </div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-brand-amber">{vendor.location}</p>
-              <h4 className="mt-1 text-xl font-semibold text-[#3F3228]">{vendor.name}</h4>
-              <p className="mt-2 text-sm text-brand-primary">{vendor.specialty}</p>
-              <p className="mt-3 text-sm leading-6 text-[#6d5f50]">{vendor.note}</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-brand-amber">
+                {vendor.location}
+              </p>
+              <h4 className="mt-1 text-xl font-semibold text-[#3F3228]">
+                {vendor.name}
+              </h4>
+              <p className="mt-2 text-sm text-brand-primary">
+                {vendor.specialty}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-[#6d5f50]">
+                {vendor.note}
+              </p>
               <Link
-                href={`/our-vendors/${slugify(vendor.name)}`}
+                href={`/vendors/${slugify(vendor.name)}`}
                 className="mt-4 inline-flex text-sm font-semibold text-brand-primary hover:underline"
               >
                 View vendor
@@ -108,5 +131,5 @@ export default function LandingPage() {
         </div>
       </section>
     </>
-  )
+  );
 }
