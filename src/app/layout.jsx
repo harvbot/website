@@ -9,6 +9,7 @@ const amaticSC = Amatic_SC({ subsets: ['latin'], weight: ['700'], variable: '--f
 export const metadata = {
   title: 'County Farm Collective',
   description: 'Local food from Prince Edward County growers and makers, delivered weekly.',
+  icons: { icon: '/cabbage.png' },
 }
 
 export default function RootLayout({ children }) {

@@ -80,6 +80,13 @@ export async function POST(request) {
     if (!customerRes.ok) {
       const text = await customerRes.text()
       console.error('LocalLine customer error:', customerRes.status, text)
+      try {
+        const errData = JSON.parse(text)
+        const msgs = [errData.email, errData.detail].flat().filter(Boolean).join(' ')
+        if (customerRes.status === 400 && /already exists|duplicate/i.test(msgs)) {
+          return Response.json({ error: 'already_exists' }, { status: 409 })
+        }
+      } catch { /* not JSON — fall through */ }
       return Response.json({ error: 'Failed to register email' }, { status: 502 })
     }
 

@@ -4,7 +4,7 @@ import { useState } from 'react'
 export default function EmailCTA({ heading, subheading, compact = false }) {
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState('idle') // idle | loading | success | error
+  const [status, setStatus] = useState('idle') // idle | loading | success | already_exists | error
   const [errorMsg, setErrorMsg] = useState('')
 
   async function handleSubmit(e) {
@@ -18,6 +18,10 @@ export default function EmailCTA({ heading, subheading, compact = false }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, firstName }),
       })
+      if (res.status === 409) {
+        setStatus('already_exists')
+        return
+      }
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'Something went wrong')
@@ -31,11 +35,17 @@ export default function EmailCTA({ heading, subheading, compact = false }) {
     }
   }
 
-  if (status === 'success') {
+  if (status === 'success' || status === 'already_exists') {
     return (
       <div className="rounded-2xl border border-[#e2d8ca] bg-[#fffdf8] p-6 text-center shadow-[0_8px_24px_rgba(63,50,40,0.06)]">
-        <p className="text-lg font-semibold text-[#3F3228]">You're on the list!</p>
-        <p className="mt-1 text-sm text-[#6d5f50]">We'll send you a note before each week's order window opens.</p>
+        <p className="text-lg font-semibold text-[#3F3228]">
+          {status === 'already_exists' ? 'You\'re already on the list!' : 'You\'re on the list!'}
+        </p>
+        <p className="mt-1 text-sm text-[#6d5f50]">
+          {status === 'already_exists'
+            ? 'We already have you — keep an eye out for the weekly note before each order window.'
+            : 'We\'ll send you a note before each week\'s order window opens.'}
+        </p>
       </div>
     )
   }
