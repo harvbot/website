@@ -33,40 +33,39 @@ export async function generateMetadata({ params }) {
 
 // --- Products (async, streamed) -------------------------------------------
 
-// Aspect-ratio buckets for the skeleton — varied heights simulate masonry
-const SKELETON_RATIOS = ['4/3', '3/4', '1/1', '3/4', '4/3', '1/1', '3/4', '4/3', '1/1', '4/3', '3/4', '1/1']
+// Repeating span pattern — col/row in a 4-column grid
+const PATTERN = [
+  { col: 2, row: 2 },
+  { col: 1, row: 1 },
+  { col: 1, row: 2 },
+  { col: 1, row: 1 },
+  { col: 1, row: 1 },
+  { col: 2, row: 1 },
+  { col: 1, row: 1 },
+  { col: 1, row: 1 },
+]
 
-function ProductCard({ product }) {
+function ProductCard({ product, col, row }) {
   const img =
     product.images?.[0]?.full ||
     product.images?.[0]?.thumbnail ||
     product.thumbnail ||
     null
 
-  const price = product.packages?.[0]?.unit_price != null
-    ? `$${parseFloat(product.packages[0].unit_price).toFixed(2)}`
-    : null
-
-  if (!img) {
-    return (
-      <div className="break-inside-avoid">
-        <div className="flex aspect-[4/3] w-full items-center justify-center bg-[#ede5d8]">
-          <div className="px-3 text-center">
-            <p className="text-xs font-semibold leading-snug text-[#6d5f50]">{product.name}</p>
-            {price && <p className="mt-0.5 text-xs text-[#9a8a79]">{price}</p>}
+  return (
+    <div style={{ gridColumn: `span ${col}`, gridRow: `span ${row}` }}>
+      {img ? (
+        <div className="relative h-full w-full overflow-hidden">
+          <img src={img} alt={product.name} className="block h-full w-full object-cover" />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-2.5 pb-2.5 pt-8">
+            <p className="text-xs font-semibold leading-tight text-white">{product.name}</p>
           </div>
         </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="break-inside-avoid relative">
-      <img src={img} alt={product.name} className="block w-full" />
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-2.5 pb-2.5 pt-8">
-        <p className="text-xs font-semibold leading-tight text-white">{product.name}</p>
-        {price && <p className="mt-0.5 text-xs text-white/75">{price}</p>}
-      </div>
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-[#ede5d8]">
+          <p className="px-3 text-center text-xs font-semibold leading-snug text-[#6d5f50]">{product.name}</p>
+        </div>
+      )}
     </div>
   )
 }
@@ -96,21 +95,30 @@ async function VendorProducts({ vendorId, storefrontUrl }) {
   }
 
   return (
-    <div className="columns-2 sm:columns-3 lg:columns-4" style={{ columnGap: 0 }}>
-      {products.map(product => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+    <div
+      className="grid grid-cols-2 sm:grid-cols-4"
+      style={{ gap: 0, gridAutoRows: '200px', gridAutoFlow: 'dense' }}
+    >
+      {products.map((product, i) => {
+        const { col, row } = PATTERN[i % PATTERN.length]
+        return <ProductCard key={product.id} product={product} col={col} row={row} />
+      })}
     </div>
   )
 }
 
 function ProductsSkeleton() {
   return (
-    <div className="columns-2 sm:columns-3 lg:columns-4" style={{ columnGap: 0 }}>
-      {SKELETON_RATIOS.map((ratio, i) => (
-        <div key={i} className="break-inside-avoid" style={{ aspectRatio: ratio }}>
-          <div className="h-full w-full animate-pulse bg-[#e8ddd0]" />
-        </div>
+    <div
+      className="grid grid-cols-2 sm:grid-cols-4"
+      style={{ gap: 0, gridAutoRows: '200px', gridAutoFlow: 'dense' }}
+    >
+      {PATTERN.map(({ col, row }, i) => (
+        <div
+          key={i}
+          className="animate-pulse bg-[#e8ddd0]"
+          style={{ gridColumn: `span ${col}`, gridRow: `span ${row}` }}
+        />
       ))}
     </div>
   )
