@@ -38,15 +38,13 @@ const SKELETON_RATIOS = ['4/3', '3/4', '1/1', '3/4', '4/3', '1/1', '3/4', '4/3',
 
 function ProductCard({ product }) {
   const img =
-    product.images?.[0]?.image ||
-    product.images?.[0]?.url ||
-    product.images?.[0]?.src ||
-    product.image_url ||
-    product.image ||
+    product.images?.[0]?.full ||
+    product.images?.[0]?.thumbnail ||
+    product.thumbnail ||
     null
 
-  const price = product.price != null
-    ? `$${parseFloat(product.price).toFixed(2)}`
+  const price = product.packages?.[0]?.unit_price != null
+    ? `$${parseFloat(product.packages[0].unit_price).toFixed(2)}`
     : null
 
   if (!img) {
