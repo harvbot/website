@@ -46,7 +46,7 @@ const governanceRules = [
 function RuleSection({ title, items }) {
   return (
     <section className="rounded-xl border border-[#d9cebf] bg-[#fffdf8] p-6">
-      <h3 className="mb-3 text-xl font-semibold">{title}</h3>
+      <h3 className="mb-3 font-amatic text-2xl font-bold">{title}</h3>
       <ul className="space-y-2 text-[#4e4238]">
         {items.map((item) => (
           <li key={item} className="flex gap-2">
@@ -65,8 +65,8 @@ export default function CodeOfConductPage() {
       <Link href="/" className="mb-6 inline-block text-sm text-[#6d5f50] hover:underline">← Back to Home</Link>
 
       <div className="mb-8 rounded-xl border border-brand-sage bg-brand-sage/20 p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-primary">Draft Policy</p>
-        <h1 className="mt-2 text-3xl font-bold">CFC Code of Conduct (v0.1)</h1>
+        <h1 className="font-amatic text-5xl font-bold">CFC Code of Conduct</h1>
+        <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#8a7b69]">Version 1.0</p>
         <p className="mt-3 text-[#4e4238]">
           County Farm Collective exists to strengthen local food systems by connecting customers with trusted producers and products that reflect Prince Edward County values: quality, transparency, fairness, and community.
         </p>
@@ -80,7 +80,7 @@ export default function CodeOfConductPage() {
         <RuleSection title="5) Community Conduct" items={conductRules} />
 
         <section className="rounded-xl border border-[#d9cebf] bg-[#fffdf8] p-6">
-          <h3 className="mb-3 text-xl font-semibold">6) Mission Guardrails (Decision Test)</h3>
+          <h3 className="mb-3 font-amatic text-2xl font-bold">6) Mission Guardrails (Decision Test)</h3>
           <p className="mb-3 text-[#4e4238]">Before approving a product, member, or policy, ask:</p>
           <ul className="space-y-2 text-[#4e4238]">
             <li>• Does this strengthen local food resilience?</li>
@@ -94,7 +94,7 @@ export default function CodeOfConductPage() {
         <RuleSection title="7) Governance & Enforcement" items={governanceRules} />
 
         <section className="rounded-xl border border-[#d9cebf] bg-[#fffdf8] p-6">
-          <h3 className="mb-3 text-xl font-semibold">8) Continuous Improvement</h3>
+          <h3 className="mb-3 font-amatic text-2xl font-bold">8) Continuous Improvement</h3>
           <ul className="space-y-2 text-[#4e4238]">
             <li>• This code is a living document and will be reviewed at least quarterly.</li>
             <li>• Standards may evolve with seasonality, growth, and regulatory or operational realities.</li>
