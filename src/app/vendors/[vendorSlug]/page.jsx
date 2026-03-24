@@ -1,19 +1,13 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getVendors, getVendorProducts } from '../../../lib/localline'
-import { slugify } from '../../../utils/strings'
+import { getVendor, getVendorProducts } from '../../../lib/localline'
+import { vendorMap } from '../../../data/vendors'
 
-export async function generateStaticParams() {
-  try {
-    const vendors = await getVendors()
-    return vendors.map((v) => ({ vendorSlug: slugify(v.name) }))
-  } catch {
-    return []
-  }
+export function generateStaticParams() {
+  return vendorMap.map(v => ({ vendorSlug: v.slug }))
 }
 
 function ProductCard({ product }) {
-  // LocalLine product image may be at images[0].image, images[0].url, or image_url
   const img =
     product.images?.[0]?.image ||
     product.images?.[0]?.url ||
@@ -44,37 +38,26 @@ function ProductCard({ product }) {
 export default async function VendorProfilePage({ params }) {
   const { vendorSlug } = await params
 
-  let vendors
-  try {
-    vendors = await getVendors()
-  } catch (err) {
-    console.error('Failed to load vendors:', err)
-    notFound()
-  }
-
-  const vendor = vendors.find((v) => slugify(v.name) === vendorSlug)
+  const vendor = vendorMap.find(v => v.slug === vendorSlug)
   if (!vendor) notFound()
 
-  let products = []
-  try {
-    products = await getVendorProducts(vendor.id)
-  } catch (err) {
-    console.error(`Failed to load products for vendor ${vendor.id}:`, err)
-  }
+  const [detail, products] = await Promise.allSettled([
+    getVendor(vendor.id),
+    getVendorProducts(vendor.id),
+  ])
 
-  // Derive fields from whatever LocalLine returns — field names may vary
-  const name = vendor.name
-  const location = vendor.city || vendor.location || vendor.address?.city || null
-  const bio = vendor.bio || vendor.description || vendor.about || null
-  const logo =
-    vendor.logo ||
-    vendor.profile_image ||
-    vendor.image ||
-    null
-  const storefrontUrl = vendor.storefront_url || `https://cfc.localline.ca/vendors/${vendor.id}`
+  const vendorDetail = detail.status === 'fulfilled' ? detail.value : {}
+  if (detail.status === 'rejected') console.error(`Failed to load vendor ${vendor.id}:`, detail.reason)
 
-  // Group products by category
-  const byCategory = products.reduce((acc, p) => {
+  const productList = products.status === 'fulfilled' ? products.value : []
+  if (products.status === 'rejected') console.error(`Failed to load products for vendor ${vendor.id}:`, products.reason)
+
+  const bio = vendorDetail.bio || vendorDetail.description || vendorDetail.about || null
+  const location = vendorDetail.city || vendorDetail.location || null
+  const logo = vendorDetail.logo || vendorDetail.profile_image || vendorDetail.image || null
+  const storefrontUrl = `https://cfc.localline.ca/vendors/${vendor.id}`
+
+  const byCategory = productList.reduce((acc, p) => {
     const cat = p.category_name || p.category || 'Products'
     if (!acc[cat]) acc[cat] = []
     acc[cat].push(p)
@@ -96,7 +79,7 @@ export default async function VendorProfilePage({ params }) {
             <div className="shrink-0">
               <img
                 src={logo}
-                alt={name}
+                alt={vendor.name}
                 className="h-24 w-24 rounded-2xl border border-[#e2d8ca] bg-white object-contain p-2 shadow-sm"
               />
             </div>
@@ -107,18 +90,21 @@ export default async function VendorProfilePage({ params }) {
                 {location} · Prince Edward County
               </p>
             )}
-            <h1 className="font-amatic text-5xl font-bold text-[#3F3228] md:text-6xl">{name}</h1>
+            <h1 className="font-amatic text-5xl font-bold text-[#3F3228] md:text-6xl">{vendor.name}</h1>
             {bio && (
-              <p className="mt-4 max-w-2xl text-base leading-7 text-[#5f5244]">{bio}</p>
+              <div
+                className="mt-4 max-w-2xl text-base leading-7 text-[#5f5244] [&_a]:text-brand-primary [&_a]:underline [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5"
+                dangerouslySetInnerHTML={{ __html: bio }}
+              />
             )}
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6">
               <a
                 href={storefrontUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center rounded-full bg-brand-primary px-5 py-2.5 text-sm font-semibold text-[#f7f4ed] hover:bg-brand-primary-dark"
               >
-                Shop {name} →
+                Shop {vendor.name} →
               </a>
             </div>
           </div>
@@ -132,7 +118,7 @@ export default async function VendorProfilePage({ params }) {
             <div key={category}>
               <h2 className="mb-4 text-xl font-semibold text-[#3F3228]">{category}</h2>
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {items.map((product) => (
+                {items.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
