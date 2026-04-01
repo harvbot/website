@@ -1,10 +1,10 @@
-import { Amatic_SC, Fraunces, Inter } from 'next/font/google'
+import { Amatic_SC, Merriweather, Inter } from 'next/font/google'
 import Header from '../components/Header'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '../lib/site'
 import '../index.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
-const fraunces = Fraunces({ subsets: ['latin'], weight: ['500', '700'], variable: '--font-fraunces', display: 'swap' })
+const merriweather = Merriweather({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-merriweather', display: 'swap' })
 const amaticSC = Amatic_SC({ subsets: ['latin'], weight: ['700'], variable: '--font-amatic', display: 'swap' })
 
 export const metadata = {
@@ -56,7 +56,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${amaticSC.variable}`}>
+    <html lang="en" className={`${inter.variable} ${merriweather.variable} ${amaticSC.variable}`}>
       <body>
         <Header />
         <main>{children}</main>
